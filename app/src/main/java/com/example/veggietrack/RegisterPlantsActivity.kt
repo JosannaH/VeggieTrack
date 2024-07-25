@@ -59,17 +59,15 @@ fun RegisterPlantsScreen() {
       Text("Register your plants", style = MaterialTheme.typography.headlineLarge)
       
       DropdownMenuWithTextField(
-        // nameOfDropdown = "vegetable type",
          label = "Type of vegetable",
          options = vegetableOptions,
          selectedOption = vegetableType,
          onOptionSelected = { vegetableType = it }
       )
-      
+      // TODO selected option should be reset if you change the value in first dropdown
       DropdownMenuWithTextField(
-        // nameOfDropdown = "specific type",
-         label = "${if (vegetableType.isNotEmpty()) "Type of " + vegetableType else "Specify " +
-                 "type"}",
+         label = "${if (vegetableType.isNotEmpty()) "Type of " + vegetableType
+            else "Specify " + "type"}",
          options = specificOptions,
          selectedOption = specificType,
          onOptionSelected = { specificType = it }
@@ -91,9 +89,9 @@ fun RegisterPlantsScreen() {
    }
 }
 
+// TODO dropdown should work when you click somewhere in the textfield
 @Composable
 fun DropdownMenuWithTextField(
-   //nameOfDropdown: String,
    label: String,
    options: List<String>,
    selectedOption: String,
@@ -101,14 +99,8 @@ fun DropdownMenuWithTextField(
 ) {
    var expanded by remember { mutableStateOf(false) }
    val currentText = if (selectedOption.isEmpty()) label else selectedOption
-
-   Box(
-      modifier = Modifier.clickable(
-         interactionSource = remember { MutableInteractionSource() },
-         indication = null
-      ) {
-      }
-   ){
+   
+   Box {
       OutlinedTextField(
          value = currentText,
          onValueChange = {},
@@ -124,17 +116,16 @@ fun DropdownMenuWithTextField(
       DropdownMenu(
          expanded = expanded,
          onDismissRequest = { expanded = false },
-         ){
-            options.forEach { option ->
-               DropdownMenuItem(
-                  text = { Text(option) },
-                  onClick = {
-                     onOptionSelected(option)
-                     expanded = false
-                  }
-               )
-            }
+      ) {
+         options.forEach { option ->
+            DropdownMenuItem(
+               text = { Text(option) },
+               onClick = {
+                  onOptionSelected(option)
+                  expanded = false
+               }
+            )
          }
-      
+      }
    }
 }
