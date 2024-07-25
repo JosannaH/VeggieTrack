@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +41,8 @@ fun RegisterPlantsScreen() {
    var vegetableType by remember { mutableStateOf("") }
    var specificType by remember { mutableStateOf("") }
    var amount by remember { mutableStateOf("") }
-   val vegetableOptions = listOf("Tomato", "Carrot", "Lettuce") // Example options
+   
+   val vegetableOptions = listOf("Tomato", "Carrot", "Lettuce")
    val specificOptions = when (vegetableType) {
       "Tomato" -> listOf("Cherry", "Beefsteak", "Heirloom")
       "Carrot" -> listOf("Nantes", "Imperator", "Chantenay")
@@ -59,18 +59,19 @@ fun RegisterPlantsScreen() {
       Text("Register your plants", style = MaterialTheme.typography.headlineLarge)
       
       DropdownMenuWithTextField(
+        // nameOfDropdown = "vegetable type",
          label = "Type of vegetable",
          options = vegetableOptions,
-         // Show first list item TODO might need to change when db i configured
-         selectedOption = "hej", //vegetableOptions.get(0),
+         selectedOption = vegetableType,
          onOptionSelected = { vegetableType = it }
       )
       
       DropdownMenuWithTextField(
-         label = "Type of ${if (vegetableType.isNotEmpty()) vegetableType else "vegetable"}",
+        // nameOfDropdown = "specific type",
+         label = "${if (vegetableType.isNotEmpty()) "Type of " + vegetableType else "Specify " +
+                 "type"}",
          options = specificOptions,
-         // Show first list item TODO might need to change when db i configured
-         selectedOption = "hej",
+         selectedOption = specificType,
          onOptionSelected = { specificType = it }
       )
       
@@ -92,6 +93,7 @@ fun RegisterPlantsScreen() {
 
 @Composable
 fun DropdownMenuWithTextField(
+   //nameOfDropdown: String,
    label: String,
    options: List<String>,
    selectedOption: String,
@@ -100,8 +102,14 @@ fun DropdownMenuWithTextField(
    var expanded by remember { mutableStateOf(false) }
    val currentText = if (selectedOption.isEmpty()) label else selectedOption
 
-   Box{
-      TextField(
+   Box(
+      modifier = Modifier.clickable(
+         interactionSource = remember { MutableInteractionSource() },
+         indication = null
+      ) {
+      }
+   ){
+      OutlinedTextField(
          value = currentText,
          onValueChange = {},
          label = { Text(label) },
@@ -110,24 +118,23 @@ fun DropdownMenuWithTextField(
             .fillMaxWidth()
             .clickable(
                interactionSource = remember { MutableInteractionSource() },
-               indication = null
+               indication = null,
             ) { expanded = true }
       )
       DropdownMenu(
          expanded = expanded,
-         onDismissRequest = { expanded = false }
-      ) {
-         options.forEach { option ->
-            DropdownMenuItem(
-               
-               text = { Text(option) },
-               onClick = {
-                  onOptionSelected(option)
-                  expanded = false
-                  
-               }
-            )
+         onDismissRequest = { expanded = false },
+         ){
+            options.forEach { option ->
+               DropdownMenuItem(
+                  text = { Text(option) },
+                  onClick = {
+                     onOptionSelected(option)
+                     expanded = false
+                  }
+               )
+            }
          }
-      }
+      
    }
 }
