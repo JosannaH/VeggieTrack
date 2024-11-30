@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -17,13 +18,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.veggietrack.ui.theme.IconDropdownMenuArrow
 import com.example.veggietrack.ui.theme.VeggieTrackTheme
 
 class RegisterPlantsActivity : ComponentActivity() {
@@ -43,13 +44,15 @@ class RegisterPlantsActivity : ComponentActivity() {
 @Preview
 @Composable
 fun RegisterPlantsScreen() {
-
-
+   
+   
    var expandedCategory by remember { mutableStateOf(false) }
    var selectedCategory by remember { mutableStateOf("Select Category") }
    var expandedType by remember { mutableStateOf(false) }
-   var selectedType by remember { mutableStateOf("Select Type")}
+   var selectedType by remember { mutableStateOf("Select Type") }
    var amount by remember { mutableStateOf("") }
+   var showDialogCategory by remember { mutableStateOf(false) }
+   var showDialogType by remember { mutableStateOf(false) }
    
    val listOfCategories = listOf("Tomato", "Carrot", "Lettuce")
    val listOfTypes = when (selectedCategory) {
@@ -59,7 +62,7 @@ fun RegisterPlantsScreen() {
       else -> emptyList()
    }
    
-      Column(
+   Column(
       modifier = Modifier
          .fillMaxSize()
          .padding(16.dp),
@@ -71,7 +74,7 @@ fun RegisterPlantsScreen() {
       )
       Row {
          Box {
-            Button(onClick = { expandedCategory = true}) {
+            Button(onClick = { expandedCategory = true }) {
                Text(text = selectedCategory)
                Icon(
                   imageVector = Icons.Default.ArrowDropDown,
@@ -88,19 +91,20 @@ fun RegisterPlantsScreen() {
                      onClick = {
                         selectedCategory = item
                         selectedType = "Select Type"
-                        expandedCategory = false })
+                        expandedCategory = false
+                     })
                }
             }
          }
          IconButton(
-            onClick = { /*TODO form to add new category*/ },
+            onClick = { showDialogCategory = true },
             content = { Icon(Icons.Default.Add, contentDescription = "Add") },
             modifier = Modifier.align(Alignment.CenterVertically)
          )
       }
       Row {
          Box {
-            Button(onClick = { expandedType = true}) {
+            Button(onClick = { expandedType = true }) {
                Text(text = selectedType)
                Icon(
                   imageVector = Icons.Default.ArrowDropDown,
@@ -116,12 +120,13 @@ fun RegisterPlantsScreen() {
                      text = { Text(text = item) },
                      onClick = {
                         selectedType = item
-                        expandedType = false })
+                        expandedType = false
+                     })
                }
             }
          }
          IconButton(
-            onClick = { /*TODO form to add new specific type*/ },
+            onClick = { showDialogType = true },
             content = { Icon(Icons.Default.Add, contentDescription = "Add") },
             modifier = Modifier.align(Alignment.CenterVertically)
          )
@@ -137,6 +142,46 @@ fun RegisterPlantsScreen() {
          modifier = Modifier.align(Alignment.CenterHorizontally)
       ) {
          Text("Save")
+      }
+      
+      if (showDialogCategory) {
+         AlertDialog(
+            onDismissRequest = { showDialogCategory = false },
+            title = { Text("Add New Category") },
+            text = {
+               AddNewCategoryDialog(
+                  onSave = { categoryName ->
+                     println("Category saved: $categoryName")
+                     showDialogCategory = false
+                  },
+                  onCancel = {
+                     showDialogCategory = false
+                  }
+               )
+            },
+            dismissButton = {},
+            confirmButton = {}
+         )
+      }
+      
+      if (showDialogType) {
+         AlertDialog(
+            onDismissRequest = { showDialogType = false },
+            title = { Text("Add New Type") },
+            text = {
+               AddNewTypeDialog(
+                  onSave = { typeName ->
+                     println("Type saved: $typeName")
+                     showDialogType = false
+                  },
+                  onCancel = {
+                     showDialogType = false
+                  }
+               )
+            },
+            dismissButton = {},
+            confirmButton = {}
+         )
       }
    }
 }
