@@ -18,12 +18,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.veggietrack.ui.theme.VeggieTrackTheme
 
@@ -41,7 +39,7 @@ class RegisterPlantsActivity : ComponentActivity() {
    }
 }
 
-@Preview
+
 @Composable
 fun RegisterPlantsScreen() {
    
@@ -51,8 +49,8 @@ fun RegisterPlantsScreen() {
    var expandedType by remember { mutableStateOf(false) }
    var selectedType by remember { mutableStateOf("Select Type") }
    var amount by remember { mutableStateOf("") }
-   var showDialogCategory by remember { mutableStateOf(false) }
-   var showDialogType by remember { mutableStateOf(false) }
+   var showDialogNewCategory by remember { mutableStateOf(false) }
+   var showDialogNewType by remember { mutableStateOf(false) }
    
    val listOfCategories = listOf("Tomato", "Carrot", "Lettuce")
    val listOfTypes = when (selectedCategory) {
@@ -97,7 +95,7 @@ fun RegisterPlantsScreen() {
             }
          }
          IconButton(
-            onClick = { showDialogCategory = true },
+            onClick = { showDialogNewCategory = true },
             content = { Icon(Icons.Default.Add, contentDescription = "Add") },
             modifier = Modifier.align(Alignment.CenterVertically)
          )
@@ -126,7 +124,7 @@ fun RegisterPlantsScreen() {
             }
          }
          IconButton(
-            onClick = { showDialogType = true },
+            onClick = { showDialogNewType = true },
             content = { Icon(Icons.Default.Add, contentDescription = "Add") },
             modifier = Modifier.align(Alignment.CenterVertically)
          )
@@ -144,18 +142,18 @@ fun RegisterPlantsScreen() {
          Text("Save")
       }
       
-      if (showDialogCategory) {
+      if (showDialogNewCategory) {
          AlertDialog(
-            onDismissRequest = { showDialogCategory = false },
+            onDismissRequest = { showDialogNewCategory = false },
             title = { Text("Add New Category") },
             text = {
                AddNewCategoryDialog(
                   onSave = { categoryName ->
                      println("Category saved: $categoryName")
-                     showDialogCategory = false
+                     showDialogNewCategory = false
                   },
                   onCancel = {
-                     showDialogCategory = false
+                     showDialogNewCategory = false
                   }
                )
             },
@@ -164,18 +162,18 @@ fun RegisterPlantsScreen() {
          )
       }
       
-      if (showDialogType) {
+      if (showDialogNewType) {
          AlertDialog(
-            onDismissRequest = { showDialogType = false },
+            onDismissRequest = { showDialogNewType = false },
             title = { Text("Add New Type") },
             text = {
                AddNewTypeDialog(
                   onSave = { typeName ->
                      println("Type saved: $typeName")
-                     showDialogType = false
+                     showDialogNewType = false
                   },
                   onCancel = {
-                     showDialogType = false
+                     showDialogNewType = false
                   }
                )
             },
