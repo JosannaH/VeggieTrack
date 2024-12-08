@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">VeggieTrack</string>
     <string name="title_activity_register_plants">RegisterPlantsActivity</string>
+    <string name="title_activity_statistics">StatisticsActivity</string>
 </resources>

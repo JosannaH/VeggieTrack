@@ -1,5 +1,6 @@
 package com.example.veggietrack
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +23,18 @@ class StartPageActivity : AppCompatActivity() {
       setContent {
          VeggieTrackTheme {
             Surface(color = MaterialTheme.colorScheme.background) {
-               StartPageScreen()
+               StartPageScreen(
+                  onNavigateToRegisterPlants = {
+                     startActivity(Intent(this, RegisterPlantsActivity::class.java))
+                  },
+                  onNavigateToRegisterHarvest = {
+                     startActivity(Intent(this, RegisterPlantsActivity::class.java))
+                  },
+                  onNavigateToStatistics = {
+                     startActivity(Intent(this, StatisticsActivity::class.java))
+                     
+                  }
+               )
             }
          }
       }
@@ -31,7 +43,11 @@ class StartPageActivity : AppCompatActivity() {
 
 
 @Composable
-fun StartPageScreen()
+fun StartPageScreen(
+   onNavigateToRegisterPlants: () -> Unit,
+   onNavigateToRegisterHarvest: () -> Unit,
+   onNavigateToStatistics: () -> Unit
+)
 {
    Column(
       modifier = Modifier
@@ -44,12 +60,16 @@ fun StartPageScreen()
          style = MaterialTheme.typography.headlineLarge
       )
 
-      Button(onClick = { }) {
+      Button(onClick = onNavigateToRegisterPlants) {
          Text(text = "Register Plants")
       }
 
-      Button(onClick = {  }) {
+      Button(onClick = onNavigateToRegisterHarvest) {
          Text(text = "Register Harvest")
+      }
+      
+      Button(onClick = onNavigateToStatistics) {
+         Text(text = "Statistics")
       }
    }
 

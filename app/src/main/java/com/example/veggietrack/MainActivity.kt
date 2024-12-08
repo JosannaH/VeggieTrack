@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
       enableEdgeToEdge()
       setContent {
          VeggieTrackTheme {
-            val intent = Intent(this, RegisterHarvestActivity::class.java)
+            val intent = Intent(this, StartPageActivity::class.java)
             startActivity(intent)
          }
       }
